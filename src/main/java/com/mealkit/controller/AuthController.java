@@ -2,19 +2,24 @@ package com.mealkit.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mealkit.OAuth2.domainTO.NaverToken;
-//import com.mealkit.OAuth2.service.KakaoService;
 import com.mealkit.OAuth2.service.NaverService;
+import com.mealkit.domain.DTO.EmailDTO;
 import com.mealkit.domain.UserAccount;
 import com.mealkit.domain.constant.RoleType;
-import com.mealkit.jwt.domainTO.*;
+import com.mealkit.jwt.domainTO.JwtTokens;
+import com.mealkit.jwt.domainTO.MessageResponse;
+import com.mealkit.jwt.domainTO.SignUpRequest;
 import com.mealkit.repository.UserRepository;
+import com.mealkit.service.EmailService;
 import com.mealkit.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -23,20 +28,30 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
+
+    private AuthenticationManager authenticationManager;
+
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
     JwtService jwtService;
+
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    EmailService ems;
+
+
 
     //private final KakaoService kakaoService;
     private final NaverService naverService;
 
-    @PostMapping("/signin")
+/*    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser
                (@RequestBody LoginRequest loginRequest) {
         log.info("유저 이름 가져오기 : " +loginRequest.getUsername() + "유저 비밀번호 가져오기 : " + loginRequest.getPassword());
+
+
 
            UserAccount userAccount = userRepository.findByUserName(loginRequest.getUsername());
 //                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
@@ -47,12 +62,20 @@ public class AuthController {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
+        if(loginRequest.getUsername() == userAccount.getUserName() && loginRequest.getPassword() == userAccount.getUserPassword()){
+
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(userAccount.getUserName(), userAccount.getUserPassword()));
+            log.info(authentication.getPrincipal().toString());
+        }
+
+
 
         JwtTokens jwtToken = jwtService.joinJwtToken(userAccount.getUserName());
 
 
-        return ResponseEntity.ok(new MessageResponse("Thank You" + jwtToken));
-    }
+        return ResponseEntity.ok(loginRequest);
+    }*/
 
 /*    @PostMapping("/refreshToken")
     public ResponseEntity refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
@@ -81,7 +104,9 @@ public class AuthController {
    @PostMapping("/signup")
     public ResponseEntity<?> registerUser
                   (@RequestBody SignUpRequest signUpRequest) {
-        log.info("확인"+signUpRequest.getUsername());
+        log.info("확인 : "+signUpRequest.getUsername() + " and 비밀번호 : " + signUpRequest.getPassword());
+       System.out.println(userRepository.existsByUserName(signUpRequest
+               .getUsername()));
         if (userRepository.existsByUserName(signUpRequest
               .getUsername())) {
 
@@ -90,7 +115,7 @@ public class AuthController {
                   ("Error: username is already taken!"));
         }
 
-        if (userRepository.existsByEmail
+        if (userRepository.existsByUserEmail
                            (signUpRequest.getEmail())) {
 
             return ResponseEntity.badRequest()
@@ -100,7 +125,7 @@ public class AuthController {
 
         UserAccount userAccount = UserAccount.builder()
                 .userName(signUpRequest.getUsername())
-                .email(signUpRequest.getEmail())
+                .userEmail(signUpRequest.getEmail())
                 .userPassword(passwordEncoder.encode(signUpRequest.getPassword()))
                 .nickName(signUpRequest.getNickName())
                 .role(RoleType.USER)
@@ -126,6 +151,30 @@ public class AuthController {
     @GetMapping("/login/oauth2/code/naver")
     public String NaverCode(@RequestParam("code") String code) {
         return "네이버 로그인 인증완료, code: "  + code;
+    }
+
+
+
+
+    @PostMapping("/sendEmail")
+    public String sendEmail(@RequestParam String userEmail) throws Exception {
+        System.out.println("확인1 : " +userEmail);
+        log.info("유저이메일 : " + userEmail);
+    EmailDTO email = ems.sendEmail(userEmail);
+    ems.mailSend(email);
+    return "AdminPost/index";
+
+    }
+    @RequestMapping(value = "/findUser", method = RequestMethod.POST) //이름으로 로그인하는중인데 닉네임혹은 이메일로 바꿀예정
+    public String userEmail(
+            @RequestParam (value = "userEmail", required = false) String userEmail) throws Exception{
+        System.out.println("유저 이메일 : " + userEmail);
+        UserAccount userAccount = userRepository.findByUserEmail(userEmail); //아이디찾기 위한 DTO 만들예정
+
+        String nickName= userAccount.getNickName();
+        System.out.println(nickName);
+
+        return "success";
     }
 
 

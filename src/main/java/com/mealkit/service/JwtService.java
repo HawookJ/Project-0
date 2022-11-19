@@ -127,9 +127,12 @@ public class JwtService {
         RefreshToken jwtRefreshToken = findUser.getRefreshToken();
         log.info("check jwtRefreshToken : " + jwtRefreshToken);
         if (jwtRefreshToken.getRefreshToken().equals(refreshToken)) {
-            log.info("같은지 확인" );
+            log.info("같은지 확인 : " + jwtRefreshToken.getRefreshToken() );
+            log.info("같은지 확인 : " + jwtRefreshToken );
             return jwtRefreshToken;
         }
+        log.info("같은지 확인 : " + jwtRefreshToken.getRefreshToken() );
+        log.info("같은지 확인 : " + refreshToken );
         log.info("리프레시 토큰이 다를떄 나오는 메세지");
         return null;
     }
@@ -143,8 +146,8 @@ public class JwtService {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
-        map.put("accessToken", jwtTokens.getAccessToken());
-        map.put("refreshToken", jwtTokens.getRefreshToken());
+        map.put("refreshToken", jwtTokens.getAccessToken());
+        map.put("accessToken", jwtTokens.getRefreshToken());
         return map;
     }
 

@@ -106,7 +106,7 @@ public class NaverService {
                     .userPassword(null) //필요없으니 일단 아무거도 안넣음. 원하는데로 넣으면 됌
                     .nickName(profile.response.getNickname())
                    // .profileImg(profile.response.profile_image)
-                    .email(profile.response.email)
+                    .userEmail(profile.response.email)
                     .role(RoleType.USER)
                    // .createTime(LocalDateTime.now())
                     .provider("Naver")

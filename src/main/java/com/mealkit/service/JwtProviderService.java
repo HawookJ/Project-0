@@ -33,6 +33,7 @@ public class JwtProviderService {
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.AccessToken_TIME))
                 .withClaim("id", id)
                 .withClaim("userName", userName)
+
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         //Refresh token 생성

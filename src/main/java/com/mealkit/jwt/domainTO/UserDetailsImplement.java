@@ -1,6 +1,7 @@
 package com.mealkit.jwt.domainTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mealkit.domain.DTO.UserAccountDto;
 import com.mealkit.domain.UserAccount;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,14 +15,14 @@ public class UserDetailsImplement implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-private Long id;
-private String username;
-@JsonIgnore
-private String password;
-private String email;
+    private Long id;
+    private String username;
+    @JsonIgnore
+    private String password;
+    private String email;
 
-@Getter
-private UserAccount userAccount;
+    @Getter
+    private UserAccount userAccount;
 
     public UserDetailsImplement(UserAccount userAccount) {
         this.userAccount = userAccount;
@@ -41,17 +42,29 @@ private UserAccount userAccount;
     public static UserDetailsImplement build(UserAccount userAccount) {
 
         return new UserDetailsImplement(userAccount.getUserId(),
-                userAccount.getUserName(), userAccount.getEmail(),
+                userAccount.getUserName(), userAccount.getUserEmail(),
                 userAccount.getUserPassword());
     }
 
+    public UserAccountDto toDto() {
+        return UserAccountDto.of(
+                id,
+                username,
+                userAccount.getNickName(),
+                email,
+                userAccount.getUserChild(),
+                userAccount.getUserLevel(),
+                userAccount.getUserMemo(),
+                password
+        );
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         userAccount.getRoleList().forEach(r -> {
-            authorities.add(()-> r );
+            authorities.add(() -> r);
         });
         return authorities;
     }

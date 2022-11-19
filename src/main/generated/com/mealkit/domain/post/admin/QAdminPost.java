@@ -24,11 +24,9 @@ public class QAdminPost extends EntityPathBase<AdminPost> {
 
     public final com.mealkit.domain.constant.QAuditingFields _super = new com.mealkit.domain.constant.QAuditingFields(this);
 
-    public final SetPath<AdminComment, QAdminComment> adminComments = this.<AdminComment, QAdminComment>createSet("adminComments", AdminComment.class, QAdminComment.class, PathInits.DIRECT2);
+    public final SetPath<AdminPostComment, QAdminPostComment> adminPostComments = this.<AdminPostComment, QAdminPostComment>createSet("adminPostComments", AdminPostComment.class, QAdminPostComment.class, PathInits.DIRECT2);
 
     public final com.mealkit.domain.QBoard board;
-
-    public final BooleanPath CCTV = createBoolean("CCTV");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -36,7 +34,11 @@ public class QAdminPost extends EntityPathBase<AdminPost> {
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
+    public final SetPath<com.mealkit.domain.Hashtag, com.mealkit.domain.QHashtag> hashtags = this.<com.mealkit.domain.Hashtag, com.mealkit.domain.QHashtag>createSet("hashtags", com.mealkit.domain.Hashtag.class, com.mealkit.domain.QHashtag.class, PathInits.DIRECT2);
+
     public final StringPath homeAddress = createString("homeAddress");
+
+    public final BooleanPath homeCCTV = createBoolean("homeCCTV");
 
     public final NumberPath<Integer> homeChildren = createNumber("homeChildren", Integer.class);
 
@@ -66,6 +68,8 @@ public class QAdminPost extends EntityPathBase<AdminPost> {
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
+    public final com.mealkit.domain.QUserAccount userAccount;
+
     public QAdminPost(String variable) {
         this(AdminPost.class, forVariable(variable), INITS);
     }
@@ -85,6 +89,7 @@ public class QAdminPost extends EntityPathBase<AdminPost> {
     public QAdminPost(Class<? extends AdminPost> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.board = inits.isInitialized("board") ? new com.mealkit.domain.QBoard(forProperty("board")) : null;
+        this.userAccount = inits.isInitialized("userAccount") ? new com.mealkit.domain.QUserAccount(forProperty("userAccount"), inits.get("userAccount")) : null;
     }
 
 }

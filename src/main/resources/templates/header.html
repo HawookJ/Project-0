@@ -1,10 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>헤더</title>
 </head>
-<body>
 
-</body>
+<header class="headerCss">
+    <!--    <a href="https://kauth.kakao.com/oauth/authorize?client_id=xxx&redirect_uri=http://localhost:9011/login/oauth2/code/kakao&response_type=code">-->
+    <!--        카카오 인가코드 발습</a>-->
+    <!--    <a href="https://nid.naver.com/oauth2.0/authorize?client_id=4U0dG6smZXClFTARNuMJ&redirect_uri=http://localhost:9011/login/oauth2/code/naver&response_type=code">-->
+    <!--        네이버 인가코드 발습</a>-->
+    <body>
+
+    <div class="upperHead">
+
+        <div id="check">
+        <div th:if="${isLogged} == false">
+            <button type="button" class="login-button" onclick="LoginBtn()">로그인 |</button>
+        </div>
+
+        <div th:unless="${isLogged} == true">
+    <button type="button" class="my-button" onclick="MyBtn()">회원 |</button>
+        </div>
+        </div>
+        <div>
+            <button type="button" class="login-button">회원가입 |</button>
+        </div>
+
+        <div class="faq">
+            <button><a href="#">FAQ |</a></button>
+        </div>
+
+    </div>
+
+
+    <div id="LoginModal">
+
+        <form class="login-popup" id="login-form" method="post">
+
+            <div class="loginCenter">
+
+                <div class="loginText">로그인
+                    <button type="button" class="close" onclick="closeBtn()">X</button>
+                </div>
+
+                <div class="loginInput">
+                    <input class="input" id="userName" name="userName" type="text" placeholder="아이디"/>
+                    <label class="label" for="userName">아이디</label>
+                </div>
+                <div class="loginInput">
+                    <input class="input" id="userPassword" name="userPassword" placeholder="비밀번호">
+                    <label class="label" for="userPassword">비밀번호</label>
+
+                </div>
+
+            </div>
+
+            <div id="errorMsg">비밀번호가 일치하지 않습니다</div>
+
+            <div class="submitBtn">
+
+                <button type="button" onclick="userLogin()">로그인</button>
+            </div>
+            <div class="find"><span> <a href="http://localhost:9011/findId">아이디 찾기 | </a> <a href="http://localhost:9011/findPw">비밀번호 찾기</a></span></div>
+        </form>
+
+    </div>
+
+
+    <div class="list">
+
+
+        <div class="empty-space"></div>
+        <div class="home-list">
+            <a href="#">HomeTag</a></div>
+
+        <div class="empty-space"></div>
+        <div class="empty-space"></div>
+
+        <div class="nav-list"><a href="#">새소식</a></div>
+        <div class="nav-list"><a href="#">소통</a></div>
+        <div class="nav-list"><a href="#">어린이집</a></div>
+        <div class="nav-list"><a href="#">상담실</a></div>
+
+
+    </div>
+
+    </body>
+
+
+</header>
+
 </html>

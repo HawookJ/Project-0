@@ -1,16 +1,19 @@
 package com.mealkit.domain;
 
 
-import com.mealkit.domain.constant.AuditingFields;
 import com.mealkit.domain.constant.RoleType;
 import com.mealkit.jwt.domainTO.RefreshToken;
 import lombok.*;
-
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 @NoArgsConstructor
@@ -19,10 +22,10 @@ import java.util.List;
 @Entity
 @Table(indexes = {
         @Index(columnList = "user_email", unique = true),
-        @Index(columnList = "createdAt"),
-        @Index(columnList = "createdBy")
+        @Index(columnList = "createdAt")
+
 })
-public class UserAccount extends AuditingFields {
+public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,14 +37,21 @@ public class UserAccount extends AuditingFields {
     private String userName;
 
     @Setter
-    @Column(length = 100, name="user_nickname")
+    @Column(length = 100, name="user_nickname", nullable = false)
     private String nickName;
 
     @Setter
-    @Column(length = 100, name="user_email")
-    private String email;
+    @Column(length = 100, name="user_email", nullable = false)
+    private String userEmail;
 
+    @Setter
+    @Column(name = "user_child")
     private String userChild;
+
+    @Setter
+    @Column(name = "user_level")
+    private Integer userLevel;
+
 
     @Column(name = "user_provider")
     private String provider;
@@ -49,6 +59,10 @@ public class UserAccount extends AuditingFields {
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private RoleType role;
+
+    @Setter
+    @Column(name = "user_memo")
+    private String userMemo;
 
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -58,6 +72,16 @@ public class UserAccount extends AuditingFields {
     @Column(name = "user_password")
     @Setter
     private String userPassword;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @CreatedDate
+  //  @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt; // 생성일시
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @LastModifiedDate
+   // @Column(nullable = false)
+    private LocalDateTime modifiedAt; // 수정일시
 
 
     public void createRefreshToken(RefreshToken refreshToken) {
@@ -79,21 +103,54 @@ public class UserAccount extends AuditingFields {
 //나중에 확인.
 
 
-    public UserAccount update(String userName, String email){
+    public UserAccount update(String userName, String userEmail){
         this.userName =userName;
-        this.email= email;
+        this.userEmail= userEmail;
         return this;
 }
 
 
     @Builder
-    public UserAccount(String userName, String email, String userChild, String userPassword,String nickName, String provider, RoleType role){
+    public UserAccount(String userName, Integer userLevel, String userEmail, String userChild, String userPassword,String nickName,String userMemo, String provider, RoleType role){
         this.userName=userName;
-        this.email=email;
+        this.userLevel=userLevel;
+        this.userEmail=userEmail;
         this.userChild=userChild;
         this.userPassword= userPassword;
         this.nickName = nickName;
+        this.userMemo = userMemo;
         this.provider=provider;
         this.role= role;
     }
+
+    public UserAccount(Long userId, String userName, Integer userLevel, String userEmail, String userChild, String userPassword, String nickName, String userMemo, String provider, RoleType role) {
+        this.userId=userId;
+        this.userName=userName;
+        this.userLevel=userLevel;
+        this.userEmail=userEmail;
+        this.userChild=userChild;
+        this.userPassword= userPassword;
+        this.nickName = nickName;
+        this.userMemo = userMemo;
+        this.provider=provider;
+        this.role= role;
+    }
+
+    public static UserAccount of(Long userId, String userName, Integer userLevel, String userEmail, String userChild, String userPassword,String nickName,String userMemo, String provider, RoleType role){
+        return new UserAccount(userId,userName,userLevel,userEmail,userChild,userPassword,nickName,userMemo,provider,role);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserAccount that)) return false;
+        return this.getUserId() != null && this.getUserId().equals(that.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getUserId());
+    }
+
+
 }

@@ -4,16 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mealkit.domain.UserAccount;
 import com.mealkit.jwt.domainTO.JwtTokens;
 import com.mealkit.jwt.domainTO.UserDetailsImplement;
+import com.mealkit.jwt.domainTO.exception.InvalidRefreshTokenException;
+import com.mealkit.repository.UserRepository;
 import com.mealkit.service.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -31,21 +36,24 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
     private JwtService jwtService;
 
-
-
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        System.out.println(" 로그인시 AuthenticationFilter 작동!!");
 
+
+        System.out.println(" 로그인시 AuthenticationFilter 작동!!");
+        log.info("가져온거 확인하기 : " + request);
         //userName, userPassword 받기 using json
         ObjectMapper om = new ObjectMapper();
+
         UserAccount userAccount = null;
         try {
-            userAccount = om.readValue(request.getInputStream(), UserAccount.class);
+            System.out.println("check11");
+          userAccount = om.readValue(request.getInputStream(), UserAccount.class);
+
         } catch (IOException e) {
             e.printStackTrace();
+            log.info("check22");
         }
         System.out.println("AuthenticationFilter :" + userAccount);
         log.info("유저 어카운트 확인 : " + userAccount.getUserName());
@@ -59,10 +67,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         // Tip: 인증 프로바이더의 디폴트 서비스는 UserDetailsService 타입
         // Tip: 인증 프로바이더의 디폴트 암호화 방식은 BCryptPasswordEncoder
         // 결론은 인증 프로바이더에게 알려줄 필요가 없음.
+
+//if(!this.passwordEncoder.matches(userAccount.getUserPassword(),request.getInputStream())){
+//
+//}
+
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userAccount.getUserName(), userAccount.getUserPassword());
         log.info("check authenticationManager in place : " + authenticationToken.getName());
-
 
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);

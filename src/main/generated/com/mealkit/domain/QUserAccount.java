@@ -22,21 +22,9 @@ public class QUserAccount extends EntityPathBase<UserAccount> {
 
     public static final QUserAccount userAccount = new QUserAccount("userAccount");
 
-    public final com.mealkit.domain.constant.QAuditingFields _super = new com.mealkit.domain.constant.QAuditingFields(this);
+    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
-
-    //inherited
-    public final StringPath createdBy = _super.createdBy;
-
-    public final StringPath email = createString("email");
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
-
-    //inherited
-    public final StringPath modifiedBy = _super.modifiedBy;
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = createDateTime("modifiedAt", java.time.LocalDateTime.class);
 
     public final StringPath nickName = createString("nickName");
 
@@ -48,7 +36,13 @@ public class QUserAccount extends EntityPathBase<UserAccount> {
 
     public final StringPath userChild = createString("userChild");
 
+    public final StringPath userEmail = createString("userEmail");
+
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
+
+    public final NumberPath<Integer> userLevel = createNumber("userLevel", Integer.class);
+
+    public final StringPath userMemo = createString("userMemo");
 
     public final StringPath userName = createString("userName");
 

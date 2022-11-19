@@ -23,6 +23,9 @@ dependencies {
 
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation group: 'nz.net.ultraq.thymeleaf',
+			name: 'thymeleaf-layout-dialect', version: '2.4.1'
+
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -51,7 +54,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	// queryDSL 설정
 	implementation "com.querydsl:querydsl-jpa"
