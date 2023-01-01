@@ -13,5 +13,9 @@ public class SignUpRequest {
     private String email;
     private String password;
     private String nickName;
+    private String child;
+    private String memo;
+
+
 
 }

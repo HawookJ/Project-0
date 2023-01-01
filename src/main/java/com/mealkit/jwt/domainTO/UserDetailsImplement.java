@@ -48,10 +48,10 @@ public class UserDetailsImplement implements UserDetails {
 
     public UserAccountDto toDto() {
         return UserAccountDto.of(
-                id,
-                username,
+                userAccount.getUserId(),
+                userAccount.getUserName(),
                 userAccount.getNickName(),
-                email,
+                userAccount.getUserEmail(),
                 userAccount.getUserChild(),
                 userAccount.getUserLevel(),
                 userAccount.getUserMemo(),

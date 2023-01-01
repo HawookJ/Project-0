@@ -23,29 +23,27 @@
 </header>
 
 <main class="container">
-
     <div class="row">
-        <div class="card card-margin search-form">
-            <div class="card-body p-0">
                 <form id="search-form">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="row no-gutters">
-                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+                    <div>
+                                <div>
                                     <label for="search-type" hidden>검색 유형</label>
                                     <select class="form-control" id="search-type" name="searchType">
-                                        <option>제목</option>
+                                      <option>제목</option>
                                         <option>본문</option>
                                         <option>id</option>
                                         <option>닉네임</option>
                                         <option>해시태그</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-8 col-md-6 col-sm-12 p-0">
+
+                                <div >
                                     <label for="search-value" hidden>검색어</label>
                                     <input type="text" placeholder="검색어..." class="form-control" id="search-value" name="searchValue">
                                 </div>
-                                <div class="col-lg-1 col-md-3 col-sm-12 p-0">
+
+                                <div>
                                     <button type="submit" class="btn btn-base">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
                                             <circle cx="11" cy="11" r="8"></circle>
@@ -53,20 +51,17 @@
                                         </svg>
                                     </button>
                                 </div>
-                            </div>
+
                         </div>
-                    </div>
                 </form>
-            </div>
-        </div>
     </div>
 
     <div class="row">
-        <table class="table" id="article-table">
+        <table class="table" id="adminPosts-table">
             <thead>
             <tr>
                 <th class="title col-6"><a>제목</a></th>
-                <th class="hashtag col-2"><a>해시태그</a></th>
+             <!--   <th class="hashtag col-2"><a>해시태그</a></th>-->
                 <th class="user-id"><a>작성자</a></th>
                 <th class="created-at"><a>작성일</a></th>
             </tr>
@@ -78,25 +73,14 @@
                 <td class="user-id">Uno</td>
                 <td class="created-at"><time>2022-01-01</time></td>
             </tr>
-            <tr>
-                <td>두번째글</td>
-                <td>#spring</td>
-                <td>Uno</td>
-                <td><time>2022-01-02</time></td>
-            </tr>
-            <tr>
-                <td>세번째글</td>
-                <td>#java</td>
-                <td>Uno</td>
-                <td><time>2022-01-03</time></td>
-            </tr>
+
             </tbody>
         </table>
     </div>
 
     <div class="row">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a class="btn btn-primary me-md-2" role="button" id="write-article">글쓰기</a>
+            <a href="http://localhost:9011/homes/posts/form">글쓰기</a>
         </div>
     </div>
 

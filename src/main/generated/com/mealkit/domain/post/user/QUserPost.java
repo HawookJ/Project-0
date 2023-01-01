@@ -32,7 +32,7 @@ public class QUserPost extends EntityPathBase<UserPost> {
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
-    public final StringPath hashtag = createString("hashtag");
+    public final SetPath<com.mealkit.domain.Hashtag, com.mealkit.domain.QHashtag> hashtags = this.<com.mealkit.domain.Hashtag, com.mealkit.domain.QHashtag>createSet("hashtags", com.mealkit.domain.Hashtag.class, com.mealkit.domain.QHashtag.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> hidePost = createNumber("hidePost", Integer.class);
 
@@ -44,17 +44,19 @@ public class QUserPost extends EntityPathBase<UserPost> {
 
     public final QPostContent postContent;
 
-    public final NumberPath<Long> postId = createNumber("postId", Long.class);
-
     public final NumberPath<Integer> postLevel = createNumber("postLevel", Integer.class);
 
     public final NumberPath<Long> postView = createNumber("postView", Long.class);
 
     public final StringPath title = createString("title");
 
-    public final SetPath<UserComment, QUserComment> userComments = this.<UserComment, QUserComment>createSet("userComments", UserComment.class, QUserComment.class, PathInits.DIRECT2);
+    public final com.mealkit.domain.QUserAccount userAccount;
 
     public final SetPath<com.mealkit.domain.post.UserLike, com.mealkit.domain.post.QUserLike> userLike = this.<com.mealkit.domain.post.UserLike, com.mealkit.domain.post.QUserLike>createSet("userLike", com.mealkit.domain.post.UserLike.class, com.mealkit.domain.post.QUserLike.class, PathInits.DIRECT2);
+
+    public final SetPath<UserPostComment, QUserPostComment> userPostComments = this.<UserPostComment, QUserPostComment>createSet("userPostComments", UserPostComment.class, QUserPostComment.class, PathInits.DIRECT2);
+
+    public final NumberPath<Long> userPostId = createNumber("userPostId", Long.class);
 
     public QUserPost(String variable) {
         this(UserPost.class, forVariable(variable), INITS);
@@ -76,6 +78,7 @@ public class QUserPost extends EntityPathBase<UserPost> {
         super(type, metadata, inits);
         this.board = inits.isInitialized("board") ? new com.mealkit.domain.QBoard(forProperty("board")) : null;
         this.postContent = inits.isInitialized("postContent") ? new QPostContent(forProperty("postContent")) : null;
+        this.userAccount = inits.isInitialized("userAccount") ? new com.mealkit.domain.QUserAccount(forProperty("userAccount"), inits.get("userAccount")) : null;
     }
 
 }

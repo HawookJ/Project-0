@@ -2,23 +2,17 @@ package com.mealkit.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mealkit.domain.UserAccount;
+import com.mealkit.jwt.domainTO.JwtProperties;
 import com.mealkit.jwt.domainTO.JwtTokens;
 import com.mealkit.jwt.domainTO.UserDetailsImplement;
-import com.mealkit.jwt.domainTO.exception.InvalidRefreshTokenException;
-import com.mealkit.repository.UserRepository;
 import com.mealkit.service.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -75,7 +69,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userAccount.getUserName(), userAccount.getUserPassword());
-        log.info("check authenticationManager in place : " + authenticationToken.getName());
+        log.info("check authenticationManager in place : " + authenticationToken.getName()
+        +" with password : " + userAccount.getUserPassword());
 
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -109,8 +104,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);
+        response.addHeader(JwtProperties.HEADER_STRING, jwtTokens.getAccessToken());
+        log.info("확인 : " + response.getHeader(JwtProperties.HEADER_STRING));
+        log.info("확인2 : " + response);
 
-        //response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+ jwtToken);
     }
 
 }

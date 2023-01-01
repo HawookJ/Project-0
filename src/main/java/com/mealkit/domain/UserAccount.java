@@ -111,7 +111,8 @@ public class UserAccount {
 
 
     @Builder
-    public UserAccount(String userName, Integer userLevel, String userEmail, String userChild, String userPassword,String nickName,String userMemo, String provider, RoleType role){
+    public UserAccount(LocalDateTime createdAt, String userName, Integer userLevel, String userEmail, String userChild, String userPassword,String nickName,String userMemo, String provider, RoleType role){
+        this.createdAt=createdAt;
         this.userName=userName;
         this.userLevel=userLevel;
         this.userEmail=userEmail;

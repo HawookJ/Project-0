@@ -91,9 +91,6 @@ public class NaverService {
         return naverProfile;
     }
 
-    /**
-     * 카카오 로그인 사용자 강제 회원가입
-     */
     @Transactional
     public UserAccount saveUser(String access_token) {
         NaverProfile profile = findProfile(access_token); //사용자 정보 받아오기

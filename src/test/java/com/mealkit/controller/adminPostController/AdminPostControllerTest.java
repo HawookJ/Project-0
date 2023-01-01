@@ -3,6 +3,7 @@ package com.mealkit.controller.adminPostController;
 import com.mealkit.domain.Board;
 import com.mealkit.domain.DTO.HashtagDto;
 import com.mealkit.domain.DTO.UserAccountDto;
+import com.mealkit.domain.constant.City;
 import com.mealkit.domain.constant.FormStatus;
 import com.mealkit.domain.constant.SearchType;
 import com.mealkit.domain.post.admin.Dto.AdminPostCommentDto;
@@ -63,7 +64,7 @@ class AdminPostControllerTest {
     @DisplayName("[view][list] 게시글 리스트(게시판) 페이지 =호출")
     public void givenNothing_whenRequestAdminPost_thenReturnAdminPost() throws Exception {
         // Given
-        given(adminPostService.searchAdminPosts(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(adminPostService.searchAdminPosts(eq(null), eq(null),eq(null), any(Pageable.class))).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         // When
@@ -77,7 +78,7 @@ class AdminPostControllerTest {
                 .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
 
 
-        then(adminPostService).should().searchAdminPosts(eq(null), eq(null), any(Pageable.class));
+        then(adminPostService).should().searchAdminPosts(eq(null), eq(null),eq(null), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
@@ -88,8 +89,9 @@ class AdminPostControllerTest {
     void givenSearchKeyword_whenSearchingArticlesView_thenReturnsArticlesView() throws Exception {
         // Given
         SearchType searchType = SearchType.TITLE;
+        City city = City.BUSAN;
         String searchValue = "homeTitle";
-        given(adminPostService.searchAdminPosts(eq(searchType), eq(searchValue), any(Pageable.class))).willReturn(Page.empty());
+        given(adminPostService.searchAdminPosts(eq(searchType), eq(searchValue),eq(city), any(Pageable.class))).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         // When & Then
@@ -103,7 +105,7 @@ class AdminPostControllerTest {
                 .andExpect(view().name("adminPosts/index"))
                 .andExpect(model().attributeExists("adminPost"))
                 .andExpect(model().attributeExists("searchTypes"));
-        then(adminPostService).should().searchAdminPosts(eq(searchType), eq(searchValue), any(Pageable.class));
+        then(adminPostService).should().searchAdminPosts(eq(searchType), eq(searchValue),eq(city), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
@@ -118,7 +120,7 @@ class AdminPostControllerTest {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Order.desc(sortName)));
         List<Integer> barNumbers = List.of(1, 2, 3, 4, 5);
 
-        given(adminPostService.searchAdminPosts(null, null, pageable)).willReturn(Page.empty());
+        given(adminPostService.searchAdminPosts(null, null,null, pageable)).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages())).willReturn(barNumbers);
 
         // When
@@ -135,7 +137,7 @@ class AdminPostControllerTest {
                 .andExpect(model().attributeExists("adminPost"))
                 .andExpect(model().attribute("paginationBarNumbers", barNumbers));
 // Then
-        then(adminPostService).should().searchAdminPosts(null, null, pageable);
+        then(adminPostService).should().searchAdminPosts(null, null,null, pageable);
         then(paginationService).should().getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages());
 
     }

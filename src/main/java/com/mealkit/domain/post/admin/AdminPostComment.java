@@ -2,8 +2,10 @@ package com.mealkit.domain.post.admin;
 
 import com.mealkit.domain.UserAccount;
 import com.mealkit.domain.constant.AuditingFields;
-import lombok.*;
-import org.springframework.lang.Nullable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
@@ -19,6 +21,8 @@ import java.util.Set;
         @Index(columnList = "createdBy")
 })
 public class AdminPostComment extends AuditingFields {
+
+    protected AdminPostComment(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +51,7 @@ public class AdminPostComment extends AuditingFields {
     @OneToMany(mappedBy = "parentCommentId", cascade = CascadeType.ALL)
     private Set<AdminPostComment> childComments = new LinkedHashSet<>(); //대댓
 
-    protected AdminPostComment(){}
+
 
     private AdminPostComment(UserAccount userAccount, String adminCommentContent, AdminPost adminPost, Long parentCommentId ){
         this.userAccount=userAccount;

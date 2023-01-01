@@ -80,9 +80,11 @@ public class JwtService {
 
         try {
             DecodedJWT verify = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessToken);
-
+            System.out.println("verify"+ verify);
             if (!verify.getExpiresAt().before(new Date())) {
+                System.out.println(verify.getClaim("userName").asString()+"확인6");
                 return verify.getClaim("userName").asString();
+
             }
 
         } catch (Exception e) {
@@ -110,10 +112,12 @@ public class JwtService {
 
         //refresh 토큰의 유효기간이 남아 access 토큰만 생성
         if (accessToken != null) {
-            return new JwtTokens(accessToken, refreshToken);
+            System.out.println("엑세스토큰 아직 만료 아닐시");
+            return new JwtTokens(refreshToken, accessToken);
         }
         //refresh 토큰이 만료됨 -> access, refresh 토큰 모두 재발급
         else {
+            System.out.println("모두 재발급");
             JwtTokens newJwtToken = jwtProviderService.createJwtToken(findUser.getUserId(), findUser.getUserName());
             findUser.SetRefreshToken(newJwtToken.getRefreshToken());
             return newJwtToken;
@@ -125,6 +129,7 @@ public class JwtService {
 
         //DB 에서 찾기
         RefreshToken jwtRefreshToken = findUser.getRefreshToken();
+
         log.info("check jwtRefreshToken : " + jwtRefreshToken);
         if (jwtRefreshToken.getRefreshToken().equals(refreshToken)) {
             log.info("같은지 확인 : " + jwtRefreshToken.getRefreshToken() );

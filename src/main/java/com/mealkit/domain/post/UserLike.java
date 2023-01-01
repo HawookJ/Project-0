@@ -3,7 +3,7 @@ package com.mealkit.domain.post;
 import com.mealkit.domain.UserAccount;
 import com.mealkit.domain.constant.AuditingFields;
 import com.mealkit.domain.post.admin.AdminPost;
-import com.mealkit.domain.post.user.UserComment;
+import com.mealkit.domain.post.user.UserPostComment;
 import com.mealkit.domain.post.user.UserPost;
 import lombok.Getter;
 import lombok.ToString;
@@ -26,7 +26,7 @@ public class UserLike extends AuditingFields {
     private AdminPost adminPost;
 
     @ManyToOne
-    private UserComment userComment;
+    private UserPostComment userPostComment;
 
     @ManyToOne
     private UserAccount userAccount;

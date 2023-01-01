@@ -42,9 +42,9 @@ public class QUserLike extends EntityPathBase<UserLike> {
 
     public final com.mealkit.domain.QUserAccount userAccount;
 
-    public final com.mealkit.domain.post.user.QUserComment userComment;
-
     public final com.mealkit.domain.post.user.QUserPost userPost;
+
+    public final com.mealkit.domain.post.user.QUserPostComment userPostComment;
 
     public QUserLike(String variable) {
         this(UserLike.class, forVariable(variable), INITS);
@@ -66,8 +66,8 @@ public class QUserLike extends EntityPathBase<UserLike> {
         super(type, metadata, inits);
         this.adminPost = inits.isInitialized("adminPost") ? new com.mealkit.domain.post.admin.QAdminPost(forProperty("adminPost"), inits.get("adminPost")) : null;
         this.userAccount = inits.isInitialized("userAccount") ? new com.mealkit.domain.QUserAccount(forProperty("userAccount"), inits.get("userAccount")) : null;
-        this.userComment = inits.isInitialized("userComment") ? new com.mealkit.domain.post.user.QUserComment(forProperty("userComment"), inits.get("userComment")) : null;
         this.userPost = inits.isInitialized("userPost") ? new com.mealkit.domain.post.user.QUserPost(forProperty("userPost"), inits.get("userPost")) : null;
+        this.userPostComment = inits.isInitialized("userPostComment") ? new com.mealkit.domain.post.user.QUserPostComment(forProperty("userPostComment"), inits.get("userPostComment")) : null;
     }
 
 }

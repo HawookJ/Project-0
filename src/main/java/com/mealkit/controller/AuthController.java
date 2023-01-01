@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Slf4j
@@ -46,47 +47,40 @@ public class AuthController {
     //private final KakaoService kakaoService;
     private final NaverService naverService;
 
-/*    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser
-               (@RequestBody LoginRequest loginRequest) {
-        log.info("유저 이름 가져오기 : " +loginRequest.getUsername() + "유저 비밀번호 가져오기 : " + loginRequest.getPassword());
-
-
-
-           UserAccount userAccount = userRepository.findByUserName(loginRequest.getUsername());
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-            log.info("유저에대한 정보 : " + userAccount.getUserPassword() + " and " +userAccount.getUserName());
-
-
-        if (!passwordEncoder.matches(loginRequest.getPassword() ,userAccount.getUserPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-        }
-
-        if(loginRequest.getUsername() == userAccount.getUserName() && loginRequest.getPassword() == userAccount.getUserPassword()){
-
-            Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(userAccount.getUserName(), userAccount.getUserPassword()));
-            log.info(authentication.getPrincipal().toString());
-        }
-
-
-
-        JwtTokens jwtToken = jwtService.joinJwtToken(userAccount.getUserName());
-
-
-        return ResponseEntity.ok(loginRequest);
-    }*/
-
-/*    @PostMapping("/refreshToken")
-    public ResponseEntity refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
-        log.info("토큰확인하기 : " + refreshTokenDto.getRefreshToken());
-        LoginResponse response = userDetailsServiceImpl.refreshToken(refreshTokenDto);
-        return ResponseEntity.ok(response);
-    }*/
-
+// @PostMapping("/login")
+// //활성화 안함.
+//    public ResponseEntity<?> authenticateUser
+//               (@RequestBody LoginRequest loginRequest) {
+//        log.info("유저 이름 가져오기 : " +loginRequest.getUsername() + "유저 비밀번호 가져오기 : " + loginRequest.getPassword());
+//
+//
+//
+//           UserAccount userAccount = userRepository.findByUserName(loginRequest.getUsername());
+////                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+//            log.info("유저에대한 정보 : " + userAccount.getUserPassword() + " and " +userAccount.getUserName());
+//
+//
+//        if (!passwordEncoder.matches(loginRequest.getPassword() ,userAccount.getUserPassword())) {
+//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+//        }
+//
+//        if(loginRequest.getUsername() == userAccount.getUserName() && loginRequest.getPassword() == userAccount.getUserPassword()){
+//
+//            Authentication authentication = authenticationManager
+//                    .authenticate(new UsernamePasswordAuthenticationToken(userAccount.getUserName(), userAccount.getUserPassword()));
+//            log.info(authentication.getPrincipal().toString());
+//        }
+//
+//
+//
+//        JwtTokens jwtToken = jwtService.joinJwtToken(userAccount.getUserName());
+//
+//
+//        return ResponseEntity.ok(loginRequest);
+//    }
 
     @GetMapping("/refresh/{userName}")
-    public Map<String,String> refreshToken(@PathVariable("userName") String userName, @RequestHeader("refreshToken") String refreshToken,
+    public Map<String,String> refreshToken(@PathVariable("userName") String userName, @RequestHeader("Authorization") String refreshToken,
                                            HttpServletResponse response) throws JsonProcessingException {
             log.info("check userName in area : "+ userName);
             log.info("check refreshToken in area : "+ refreshToken);
@@ -98,8 +92,6 @@ public class AuthController {
 
         return jsonResponse;
     }
-
-
 
    @PostMapping("/signup")
     public ResponseEntity<?> registerUser
@@ -124,12 +116,16 @@ public class AuthController {
         }
 
         UserAccount userAccount = UserAccount.builder()
+                .createdAt(LocalDateTime.now())
                 .userName(signUpRequest.getUsername())
                 .userEmail(signUpRequest.getEmail())
                 .userPassword(passwordEncoder.encode(signUpRequest.getPassword()))
                 .nickName(signUpRequest.getNickName())
                 .role(RoleType.USER)
-                .provider("NOT YET")
+                .userLevel(1)
+                .userChild(signUpRequest.getChild())
+                .userMemo(signUpRequest.getMemo())
+                .provider("NONE")
                 .build();
             userRepository.save(userAccount);
 
@@ -139,13 +135,13 @@ public class AuthController {
 
     @GetMapping("/api/oauth/token/naver")
     public Map<String, String> NaverLogin(@RequestParam("code") String code) {
-
+        System.out.println("네이버 로그인1");
         NaverToken oauthToken = naverService.getAccessToken(code);
 
         UserAccount saveUser = naverService.saveUser(oauthToken.getAccess_token());
 
         JwtTokens jwtToken = jwtService.joinJwtToken(saveUser.getUserName());
-
+        System.out.println("네이버 로그인2");
         return jwtService.successLoginResponse(jwtToken);
     }
     @GetMapping("/login/oauth2/code/naver")
@@ -165,7 +161,7 @@ public class AuthController {
     return "AdminPost/index";
 
     }
-    @RequestMapping(value = "/findUser", method = RequestMethod.POST) //이름으로 로그인하는중인데 닉네임혹은 이메일로 바꿀예정
+    @PostMapping(value = "/findUser") //이름으로 로그인하는중인데 닉네임혹은 이메일로 바꿀예정
     public String userEmail(
             @RequestParam (value = "userEmail", required = false) String userEmail) throws Exception{
         System.out.println("유저 이메일 : " + userEmail);
@@ -174,8 +170,7 @@ public class AuthController {
         String nickName= userAccount.getNickName();
         System.out.println(nickName);
 
-        return "success";
+        return nickName;
     }
-
 
 }

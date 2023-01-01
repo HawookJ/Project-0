@@ -1,16 +1,12 @@
 package com.mealkit.config;
 
-
-
-//import com.mealkit.OAuth2.CustomOAuth2UserService;
-
-
 import com.mealkit.jwt.filter.AuthenticationFilter;
 import com.mealkit.jwt.filter.AuthorizationFilter;
 import com.mealkit.repository.UserRepository;
 import com.mealkit.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +20,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 
-
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -32,6 +27,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    @Autowired
+    private CorsConfig corsConfig;
  private final UserRepository userRepository;
  private final JwtService jwtService;
 
@@ -40,9 +37,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .antMatchers("/oauth/**", "/sendEmail", "/api/oauth/token/kakao","/login/oauth2/code/kakao","/signup")
-                .antMatchers("/Find/**","/findId", "/login/oauth2/code/naver", "/api/oauth/token/naver", "/adminPosts" ,
-                        "/adminPost/**","/refresh/**","/findPw","/adminPosts/form" )
+                .antMatchers("/signup","/findUser","/findPw","/login/oauth2/code/naver","/api/oauth/token/naver","/check","/sendEmail","/refresh/**")
+                .antMatchers("/Find/**", "/adminPosts/form","/adminPosts", "/news/**","/community/**","/homes/posts/**","/counsel/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 
     }
@@ -54,6 +50,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic().disable().formLogin().disable();
+
         http.apply(new MyCustomDsl()); //.and().formLogin().loginPage("/login").permitAll();
         http.cors().disable().csrf().disable().exceptionHandling().and()
 
@@ -83,39 +80,18 @@ public class SecurityConfig {
            return http.build();
     }
 
-
-    public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
+        public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-log.info("why not running");
+
             http
-                   // .addFilter(config.corsFilter())
+                    .addFilter(corsConfig.corsFilter())
                     .addFilter(new AuthenticationFilter(authenticationManager, jwtService)) //AuthenticationManger가 있어야 된다.(파라미터로)
                     .addFilter(new AuthorizationFilter(authenticationManager, userRepository, jwtService));
         }
     }
-
-
-
-
-
-/*   
- 리액트 사용시
- @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }*/
 
 
 }

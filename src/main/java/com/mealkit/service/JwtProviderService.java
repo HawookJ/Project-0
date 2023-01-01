@@ -7,9 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mealkit.jwt.domainTO.JwtProperties;
 import com.mealkit.jwt.domainTO.JwtTokens;
 import com.mealkit.jwt.domainTO.RefreshToken;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -82,6 +79,7 @@ public class JwtProviderService {
             //refresh 토큰의 만료시간이 지나지 않아 access 토큰만 새로 생성
             if(!verify.getExpiresAt().before(new Date())) {
                 String accessToken = createAccessToken(verify.getClaim("id").asLong(), verify.getClaim("userName").asString());
+                System.out.println("엑세스 토큰만 재생성");
                 return accessToken;
             }
         }catch (Exception e) {
