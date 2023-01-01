@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<thlogic>
+
+    <attr sel="#header" th:replace="header :: header"/>
+    <attr sel="#footer" th:replace="footer :: footer"/>
+
+
+    <attr sel="#adminForm">
+        <attr sel=".formstatus" th:text="${formStatus} ? '게시글 ' + ${formStatus.description} : _"/>
+        <attr sel="#homeTitle" th:value="${adminPost?.homeName} ?: _"/>
+        <attr sel="#homeTitle" th:value="${adminPost?.homeTitle} ?: _"/>
+        <attr sel="#homeDetails" th:text="${adminPost?.homeDetails} ?: _"/>
+
+
+        <attr sel="#homeChildren" th:value="${adminPost?.homeChildren} ?: _"/>
+        <attr sel="#homeNumber" th:value="${adminPost?.homeNumber} ?: _"/>
+
+        <attr sel="#homeMeal" th:value="${adminPost?.homeMeal} ?: _"/>
+        <attr sel="#homeVideo" th:value="${adminPost?.homeVideo} ?: _"/>
+        <attr sel="#homeCCTV" th:value="${adminPost?.homeCCTV} ?: _"/>
+        <attr sel="#homeSize" th:value="${adminPost?.homeSize} ?: _"/>
+        <attr sel="#homeAddress" th:value="${adminPost?.homeAddress} ?: _"/>
+        <attr sel="#homeRegister" th:value="${adminPost?.homeRegister} ?: _"/>
+
+
+        <!--<attr sel="#save" th:text="${formStatus?.description}"/>-->
+        <attr sel="#update" th:if="${formStatus?.description == '수정'} "/>
+        <attr sel="#save" th:if="${formStatus?.description == '저장'} " />
+        <attr sel="#cancel-button" th:onclick="'history.back()'"/>
+    </attr>
+
+</thlogic>

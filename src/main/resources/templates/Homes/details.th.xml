@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<thlogic>
+    <attr sel="#header" th:replace="header :: header" />
+    <attr sel="#footer" th:replace="footer :: footer" />
+
+    <attr sel="#main" th:object="${adminPost}">
+        <attr sel="#post-header/h1" th:text="*{homeTitle}" />
+        <attr sel="#nickname" th:text="*{nickName}" />
+        <attr sel="#email" th:text="*{userEmail}" />
+        <attr sel="#created-at" th:datetime="*{createdAt}" th:text="*{#temporals.format(createdAt, 'yyyy-MM-dd HH:mm:ss')}" />
+        <attr sel="#hashtag" th:each="hashtag : ${adminPost.hashtags}">
+            <attr sel="a"
+                  th:text="'#' + ${hashtags}"
+                  th:href="@{/articles(searchType=${searchTypeHashtag},searchValue=${hashtag})}"
+            />
+        </attr>
+
+        <attr sel=".video"
+              th:src="@{'https://www.youtube.com/embed/' + ${adminPost.homeVideo}}"></attr>
+
+        <attr sel="div.life"
+              th:text="${adminPost.homeVideo}"></attr>
+
+        <attr sel="#the-content/pre" th:text="*{homeDetails}" />
+        <attr sel="#update-post" th:href="'/homes/posts/' + *{homeId} + '/form'" />
+
+        <attr sel=".checkid" th:value="*{homeId}" th:text="*{homeId}" />
+
+        <attr sel=".the-id" th:name="homeId" th:value="*{homeId}" />
+        <attr sel=".newComment" th:attr="onclick=|commentWrite()|"></attr>
+        <attr sel="#adminPost-comments" th:remove="all-but-first">
+            <attr sel=".adminTest" th:text="${adminPostComment.adminPostCommentId}"/>
+
+
+            <attr sel=".parent-comment[0]" th:each="adminPostComment : ${adminPostComment}">
+
+
+            <attr sel=".deleteCommentBtn" th:attr="onclick=|commentDelete('${adminPostComment.adminPostCommentId}')|"  ></attr>
+                <attr sel=".newChildComment" th:attr="onclick=|childCommentWrite('${adminPostComment.adminPostCommentId}')|"></attr>
+                <attr sel="div/strong" th:text="${adminPostComment.nickName}" />
+                <attr sel="div/small/time" th:datetime="${adminPostComment.createdAt}"
+                      th:text="${#temporals.format(adminPostComment.createdAt, 'yyyy-MM-dd HH:mm:ss')}" />
+                <attr sel="div/p" th:text="${adminPostComment.adminCommentContent}" />
+                <attr sel="ul" th:if="${!adminPostComment.childComments.isEmpty}" th:remove="all-but-first">
+                    <attr sel=".child-comment[0]" th:each="childComment : ${adminPostComment.childComments}">
+                    </attr>
+                </attr>
+            </attr>
+            <attr sel=".parent-comment-id" th:text="${adminPostComment.adminPostCommentId}" th:name="parentCommentId" />
+        </attr>
+
+
+
+        <attr sel="#pagination">
+            <attr sel="ul">
+                <attr sel="li[0]/a"
+                      th:href="*{homeId} - 1 <= 0 ? '#' : |/homes/*{homeId - 1}|"
+                      th:class="'page-link' + (*{homeId} - 1 <= 0 ? ' disabled' : '')"
+                />
+                <attr sel="li[1]/a"
+                      th:href="*{homeId} + 1 > ${totalCount} ? '#' : |/homes/*{homeId + 1}|"
+                      th:class="'page-link' + (*{homeId} + 1 > ${totalCount} ? ' disabled' : '')"
+                />
+            </attr>
+        </attr>
+    </attr>
+</thlogic>

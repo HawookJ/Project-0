@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<thlogic xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!--<attr sel="#login-form" th:action="@{/login}" th:object="${loginRequest}" method="post">-->
+
+<!--    <attr sel="#lusername" th:for="username" ></attr>-->
+<!--    <attr sel="#iusername" th:field="*{loginRequest.username}"></attr>-->
+
+<!--    <attr sel="#luserpassword" th:for="userpassword" ></attr>-->
+<!--    <attr sel="#iuserpassword" th:field="*{loginRequest.password}"></attr>-->
+<!--</attr>-->
+<attr sel="#username" sec:authorize="isAuthenticated()" sec:authentication="principal.username" />
+</thlogic>

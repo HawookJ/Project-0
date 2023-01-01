@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Hawook Jeong">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link  rel="stylesheet" th:href="@{/css/header.css}"/>
+    <title>게시판 페이지</title>
+
+</head>
+
+<body>
+<header id="header">
+
+    <hr>
+</header>
+
+<main>
+
+    <form>
+        <div class="foundUser">
+    <label>이메일 : </label>
+    <input id="findUser" placeholder="이메일을 입력해주세요">
+    <button type="button" onclick="findUsers()">아이디찾기</button>
+        </div>
+    </form>
+
+
+    <div> <a href="http://localhost:9011/findPw">비밀번호찾기</a></div>
+</main>
+
+
+<footer id="footer">
+    <hr>
+</footer>
+<script src="/js/header.js" th:inline="javascript" type="text/javascript"></script>
+<script src="/js/findUser.js" th:inline="javascript" type="text/javascript"></script>
+</body>
+
+</html>

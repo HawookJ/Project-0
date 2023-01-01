@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link  rel="stylesheet" th:href="@{/css/header.css}"/>
+</head>
+<header id="header"></header>
+<body>
+<div id="post-form-header"></div>
+
+<form id="adminForm">
+<div class="formstatus">a</div>
+    <div>
+        <label for="homeName">어린이집이름</label>
+        <input type="text" id="homeName" name="homeName">
+    </div>
+
+
+    <div>
+        <label for="homeTitle">제목</label>
+        <input type="text" id="homeTitle" name="homeTitle">
+    </div>
+
+    <div>
+    <span class="homeVideo">https://youtu.be/  </span>
+    <input name="homeVideo" id="homeVideo">
+    </div>
+
+    <div>
+        <label for="homeCCTV">cctv여부</label>
+        <input type="text" id="homeCCTV" name="homeCCTV">
+    </div>
+    <div>
+        <label for="homeSize">평수</label>
+        <input type="number" id="homeSize" name="homeSize">
+    </div>
+
+    <div>
+        <label for="homeAddress">주소</label>
+        <input type="text" id="homeAddress" name="homeAddress">
+    </div>
+
+    <div>
+        <label for="homeRegister">자격증 등록여부</label>
+        <input type="text" id="homeRegister" name="homeRegister">
+    </div>
+
+    <div>
+        <label for="homeChildren">아이</label>
+        <input type="text" id="homeChildren" name="homeChildren">
+    </div>
+
+    <div>
+        <label for="homeNumber">연락쳐</label>
+        <input type="text" id="homeNumber" name="homeNumber">
+    </div>
+
+    <div>
+        <label for="homeMeal">식대여부</label>
+        <input type="text" id="homeMeal" name="homeMeal">
+    </div>
+
+    <label for="homeDetails">본문</label>
+    <textarea id="homeDetails" name="homeDetails"></textarea>
+
+<div class="buttons">
+    <button type="button" onclick="formUpdate()" class="btn btn-primary" id="update">수정</button>
+    <button type="button" onclick="formSend()" class="btn btn-primary" id="save">저장</button>
+    <button type="button" class="btn btn-secondary" id="cancel-button">취소</button>
+</div>
+</form>
+
+<script src="/js/header.js" th:inline="javascript" type="text/javascript"></script>
+<script src="/js/upload.js" th:inline="javascript" type="text/javascript"></script>
+</body>
+<footer id="footer">
+    <hr>
+</footer>
+</html>
